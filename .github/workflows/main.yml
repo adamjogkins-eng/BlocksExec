@@ -25,9 +25,7 @@ jobs:
           -framework Foundation \
           -framework CoreGraphics \
           -lc++ \
-          -L. -lRobloxLib \
-          -Wl,-segprot,__DATA_CONST,rx,rx \
-          -Wl,-no_fixup_chains \
+          -undefined dynamic_lookup \
           Exec.mm -o BlockzExec.dylib
 
       - name: Upload Final Dylib
