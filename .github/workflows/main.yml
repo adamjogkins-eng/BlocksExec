@@ -1,6 +1,9 @@
 name: Build BlockzExec
 on: [push]
 
+permissions:
+  contents: read
+
 jobs:
   compile:
     runs-on: macos-latest
@@ -8,14 +11,13 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Fetch Delta Engine from Release
+      - name: Fetch Engine from Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          # This pulls the engine from the V1-Alpha release you just created
           gh release download V1-Alpha --repo ${{ github.repository }} --pattern 'libRobloxLib.dylib'
 
-      - name: Compile BlockzExec UI
+      - name: Compile BlockzExec
         run: |
           xcrun -sdk iphoneos clang++ -dynamiclib -arch arm64 \
           -miphoneos-version-min=14.0 \
@@ -24,9 +26,10 @@ jobs:
           -framework CoreGraphics \
           -lc++ \
           -L. -lRobloxLib \
+          -Wl,-segprot,__DATA_CONST,rw,r \
           Exec.mm -o BlockzExec.dylib
 
-      - name: Upload Final Dylib
+      - name: Upload Dylib
         uses: actions/upload-artifact@v4
         with:
           name: BlockzExec-Installer
