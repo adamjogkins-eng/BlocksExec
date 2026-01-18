@@ -26,10 +26,10 @@ jobs:
           -framework CoreGraphics \
           -lc++ \
           -L. -lRobloxLib \
-          -Wl,-segprot,__DATA_CONST,rw,r \
+          -Xlinker -segprot -Xlinker __DATA_CONST -Xlinker rw -Xlinker r \
           Exec.mm -o BlockzExec.dylib
 
-      - name: Upload Dylib
+      - name: Upload Final Dylib
         uses: actions/upload-artifact@v4
         with:
           name: BlockzExec-Installer
