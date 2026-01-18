@@ -26,7 +26,8 @@ jobs:
           -framework CoreGraphics \
           -lc++ \
           -L. -lRobloxLib \
-          -Xlinker -segprot -Xlinker __DATA_CONST -Xlinker rw -Xlinker r \
+          -Wl,-segprot,__DATA_CONST,rx,rx \
+          -Wl,-no_fixup_chains \
           Exec.mm -o BlockzExec.dylib
 
       - name: Upload Final Dylib
